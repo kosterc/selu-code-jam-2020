@@ -4,6 +4,7 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const morgan = require('morgan');
+const apiRouter = require('./routers/index');
 
 // dotenv init
 require('dotenv').config();
@@ -18,6 +19,8 @@ app.use(logger);
 
 app.use(express.static('build'));
 app.use(express.static('public'));
+
+app.use('/api', apiRouter);
 
 app.use((req, res) => res.status(400).send({
     Status: 404,
