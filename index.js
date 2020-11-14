@@ -1,44 +1,35 @@
 // Library Imports
-const express = require('express');
-const fs = require('fs');
-const http = require('http');
-const https = require('https');
-const morgan = require('morgan');
-const apiRouter = require('./routers/index');
+let bodyParser = require('body-parser');
+let express = require('express');
+let http = require('http');
+let morgan = require('morgan');
 
-// dotenv init
+// Setup .env
 require('dotenv').config();
 
-// Morgan init
-var logger = morgan('combined');
+// Morgan Logging
+let logger = morgan('combined');
 
-// Express Init
+// Setup Express
 var app = express();
 
 app.use(logger);
+app.use(bodyParser.json());
 
+// Serve the React Build Folders
 app.use(express.static('build'));
 app.use(express.static('public'));
 
-app.use('/api', apiRouter);
+// 404 Error Handler
+app.use((req, res) => {
+    res.status(404).send({
+        status: 404,
+        message: 'requested resource could not be found on this server'
+    });
+});
 
-app.use((req, res) => res.status(400).send({
-    Status: 404,
-    Message: 'The requested resource could not be found on this server.'
-}));
-
-
-// HTTP & HTTPS init
-var httpServ = http.createServer(app);
-
-/*var httpsServ = https.createServer({
-    key: fs.readFileSync('Root.key'),
-    cert: fs.readFileSync('Root.crt')
-}, app);*/
-
-// Listen on server
-const httpPort = process.env.HTTP_PORT || 80;
-//const httpsPort = process.env.HTTPS_PORT || 443;
+// Setup HTTP server
+let httpServ = http.createServer(app);
+let httpPort = process.env.HTTP_PORT || 80;
 
 httpServ.listen(httpPort, () => console.log(`Listening on *:${httpPort}`));
-//httpsServ.listen(httpsPort, () => console.log(`Listening on *:${httpsPort}`));

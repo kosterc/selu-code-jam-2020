@@ -2,7 +2,7 @@
   "name": "selu-code-jam-2020",
   "version": "0.1.0",
   "private": true,
-  "proxy": "localhost:80",
+  "proxy": "http://localhost:80",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.1.2",
@@ -22,7 +22,7 @@
   },
   "scripts": {
     "react-start": "react-scripts start",
-    "build": "react-scripts build",
+    "react-build": "react-scripts build",
     "react-test": "react-scripts test",
     "react-eject": "react-scripts eject",
     "start-dev": "concurrently \"react-scripts start\" \"nodemon index.js\"",
